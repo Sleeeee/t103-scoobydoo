@@ -1,0 +1,324 @@
+/*********************************** scoobyDoo.css *******
+* Nom prénom 1 : STAS Justin
+* Groupe       : 1TM1
+*
+*********************************************************/
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+
+*{
+	margin: 0;
+	line-height: 2.5em;
+	font-family: Montserrat, sans-serif;
+}
+
+html{
+	padding: 0;
+	background-image: url(../img/scoobyDoo.png);
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+}
+
+header{
+	width: 100%;
+	padding: 0;
+	margin-bottom: 3rem;
+	background-color: ivory;
+}
+
+header, section{
+	opacity: .95;
+}
+
+header{
+	display: flex;
+}
+
+header > img{
+	flex-grow: 0;
+	padding: 1.5rem;
+}
+
+header > div{
+	flex-grow: 1;
+}
+
+nav button{
+	width: 47%;
+	padding: 1rem;
+	margin: 0 1rem 2rem;
+}
+
+footer{
+	margin-top: 3rem;
+	padding: .5rem;
+	background-color: ivory;
+}
+
+button, [type=submit]{
+	background-color: powderblue;
+	border-width: 0;
+	border-radius: 5px;
+}
+
+button:hover, [type=submit]:hover{
+	background-color: slateblue;
+}
+
+[type=submit]{
+	width: 100%;
+}
+
+#divFormats{
+	margin: 0 3% 1.5rem;
+}
+
+section:not(.enabled){
+	display: none;
+}
+
+.centre, nav{
+	margin: 0 3%;
+	display: flex;
+	justify-content: space-around;
+}
+
+.centre > div{
+	margin: 0 3%;
+}
+
+#selectSeries, #selectUpdateMonsterGender{
+	overflow: hidden;
+}
+
+#TP10 option{
+	padding: 20px 0;
+	text-align: center;
+}
+
+option:nth-child(odd){
+	background-color: ivory;
+}
+
+option:nth-child(even), #tbEpisodesSeries tbody tr:nth-child(odd){
+	background-color: powderblue;
+}
+
+option.selected{
+	background-color: slateblue;
+}
+
+.container{
+	padding: 3%;
+	white-space: nowrap;
+	background-color: ivory;
+}
+
+.container:not(.centre > .container), #divModMonstre form{
+	border-radius: 5px;
+}
+
+ul{
+	list-style-type: none;
+}
+
+#tbEpisodesSeries{
+	display: none;
+}
+
+#tbEpisodesSeries td:nth-child(2){
+	width: 50vh;
+	white-space: wrap;
+}
+
+table{
+	border-collapse: collapse;
+}
+
+thead > tr{
+	background-color: bisque;
+}
+
+tr{
+	background-color: ivory;
+}
+
+th, td{
+	padding: .3rem;
+	border: 1px solid black;
+}
+
+tbody:not(#divModMonstre tbody) tr:hover{
+	background-color: slateblue;
+}
+
+.popup {
+  display: none;
+  position: absolute;
+  z-index: 9;
+  padding: 3%;
+  background-color: powderblue;
+  text-align: center;
+  cursor: move;
+}
+
+.popup > span:first-child{
+	display: block;
+	width: 1rem;
+	padding: .1rem .3rem;
+	background-color: indianred;
+	color: white;
+	cursor: pointer;
+}
+
+.popup > span:first-child:hover{
+	background-color: red;
+}
+
+#selectAddMonsterEpisode{
+	margin-top: 1.5rem;
+}
+
+#selectAddMonsterEpisode > option, #divModMonstre option{
+	padding: 0;
+}
+
+#divInfosEpisode{
+  top: 35%;
+  left: 5%;
+}
+
+#divInfosEpisode > .container > span{
+	display: inline-block;
+	margin: .5rem;
+}
+
+#divPersMonstres{
+	top: 75%;
+	left: 5%;
+}
+
+#divPersMonstres > div{
+	display: inline-block;
+}
+
+#divPersMonstres > span{
+	display: block;
+}
+
+#divModMonstre{
+	top: 35%;
+	left: 60%;
+	white-space: nowrap;
+}
+
+#divModMonstre > *:not(span){
+	margin: 0 auto;
+}
+
+#divModMonstre > table{
+	margin-bottom: 1.5rem;
+}
+
+#btnAddEpisodeMonster, #divModMonstre [type=submit]{
+	width: 100%;
+	height: 2.5rem;
+}
+
+form{
+	width: 75%;
+	padding: 5%;
+	line-height: 2rem;
+	text-align: center;
+	background-color: ivory;
+}
+
+input[type=text], form select{
+	width: 60%;
+}
+
+#TP11 form div{
+	background-color: powderblue;
+	margin-bottom: 1rem;
+	padding: 1.5rem 0;
+	border-radius: 5px;
+}
+
+#TP11 [type=text], #TP11 select{
+	background-color: ivory;
+	border-width: .5px;
+}
+
+#TP12{
+	flex-wrap: wrap;
+}
+
+#divCountSeries > div, #divCountEpisodes > div, #divCountMonsters > div, #divMonsterCounts > div > div{
+	display: none;
+	margin-top: 1rem;
+	padding: 5%;
+	background-color: powderblue;
+	border-radius: 5px;
+}
+
+#divCountEpisodes > select, #divCountMonstersByGender > select{
+	display: block;
+	margin-bottom: .5rem;
+	border-width: .5px;
+	background-color: powderblue;
+}
+
+ #divCountEpisodes > select{
+	 display: none;
+ }
+
+#divCountEpisodes > span{
+	display: none;
+}
+
+#divEpisodesCounts, #divMonsterCounts{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	margin-top: 1.5rem;
+	margin-bottom: 1.5rem;
+}
+
+#divMonsterCounts > div{
+	margin: 3%;
+}
+
+#divUpdateValue{
+	display: none;
+	width: 60%;
+}
+
+#divUpdateValue *{
+	text-align: center;
+}
+
+#divUpdateValue > form{
+	margin: 1.5rem auto;
+	background-color: powderblue;
+	border-radius: 5px;
+}
+
+#divUpdateValue [type=submit]{
+	margin-top: 1rem;
+	background-color: ivory;
+}
+
+#divUpdateValue [type=submit]:hover{
+	background-color: bisque;
+}
+
+#divUpdateValue > button{
+	display: block;
+	margin: 0 auto;
+	width: 75%;
+}
+
+#spanUpdateValue{
+	display: block;
+	margin: 1.5rem auto;
+	white-space: wrap;
+}

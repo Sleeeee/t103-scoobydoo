@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<!--******************************** scoobyDoo.css *******
+* Nom prénom 1 : STAS Justin
+* Groupe       : 1TM1
+********************************************************-->
+<head>
+ <title>ScoobyDoo</title>
+ <link href="css/scoobyDoo.css" rel="styleSheet">
+ <script src="js/utils.js"></script>
+ <script src="js/scoobyDoo.js"></script>
+ <script src="js/popup.js"></script>
+</head>
+<body>
+<header>
+ <img src="img/ScoobyDoo_van.png" width="200">
+ <div>
+  <h1>no JS</h1>
+  <nav>
+   <button id="bTP10">Liste d'épisodes</button>
+   <button id="bTP11">Création de monstres</button>
+   <button id="bTP12">Statistiques</button>
+  </nav>
+ </div>
+</header>
+<section id="TP10" class="enabled">
+ <div id="divFormats" class="container">
+ </div>
+ <div class="centre">
+  <div class="container">
+   <select id="selectSeries"></select>
+  </div>
+  <div class="container">
+   <h2>Liste des épisodes</h2>
+   <table id="tbEpisodesSeries">
+    <thead>
+     <tr><th>Date</th><th>Titre</th></tr>
+    </thead>
+    <tbody id="tbodyEpisodesSeries"></tbody>
+   </table>
+  </div>
+ </div>
+ <div class="popup" id="divInfosEpisode"></div>
+ <div class="popup" id="divPersMonstres"></div>
+ <div class="popup" id="divModMonstre">
+  <span onclick="closePopup('divModMonstre')">x</span>
+  <h3></h3>
+  <table>
+   <thead><tr><th>Genre</th><th>Type</th><th>Sous-type</th><th>Espèce</th></tr></thead>
+   <tbody><tr></tr></tbody>
+  </table>
+  <form onsubmit="return updateMonster(this)">
+   <label for="selectUpdateMonsterGender">Genre : </label>
+   <select id="selectUpdateMonsterGender" name="gender" size="3"></select><br>
+   <label for="selectUpdateMonsterType">Type : </label>
+   <select id="selectUpdateMonsterType" name="type" size="5"></select><br>
+   <label for="selectUpdateMonsterSubtype">Sous-type : </label>
+   <select id="selectUpdateMonsterSubtype" name="subtype" size="5"></select><br>
+   <label for="selectUpdateMonsterSpecies">Espèce : </label>
+   <select id="selectUpdateMonsterSpecies" name="species" size="5"></select><br>
+   <input type="submit" value="Modifier">
+  </form>
+  <span id="spanUpdateMonster"></span>
+ </div>
+</section>
+<section id="TP11" class="centre">
+ <form id="formAddMonsterElem" onsubmit="return addMonsterElem(this.type.value, this.elem.value);">
+  <fieldset>
+   <legend>Créer un attribut de monstre</legend>
+   <div>
+    <input type="radio" id="radioType" name="type" value="type">
+    <label for="radioType">Type</label>
+    <input type="radio" id="radioSubtype" name="type" value="subtype">
+    <label for="radioSubtype">Sous-type</label>
+    <input type="radio" id="radioSpecies" name="type" value="species">
+    <label for="radioSpecies">Espèce</label><br>
+    <label for="textAddMonsterElem">Nom de l'attribut : </label>
+    <input id="textAddMonsterElem" name="elem" type="text">
+   </div>
+    <input type="submit" value="Créer"><br>
+    <span id="spanAddMonsterElem"></span>
+  </fieldset>
+ </form>
+ <form id="formAddMonster" onsubmit="return addMonster(this.name.value, this.gender.value, this.type.value, this.subtype.value, this.species.value)">
+  <fieldset>
+   <legend>Créer un monstre</legend>
+   <div>
+    <label for="textAddMonster">Nom : </label>
+    <input type="text" id="textAddMonster" name="name"><br>
+    <label for="selectMonsterGender">Genre : </label>
+    <select id="selectMonsterGender" name="gender"></select><br>
+    <label for="selectMonsterType">Type : </label>
+    <select id="selectMonsterType" name="type"></select><br>
+    <label for="selectMonsterSubtype">Sous-type : </label>
+    <select id="selectMonsterSubtype" name="subtype"></select><br>
+    <label for="selectMonsterSpecies">Espèce : </label>
+    <select id="selectMonsterSpecies" name="species"></select>
+   </div>
+   <input type="submit" value="Créer"><br>
+   <span id="spanAddMonster"></span>
+  </fieldset>
+ </form>
+</section>
+<section id="TP12" class="centre">
+ <div id="divCountSeries" class="container">
+  <h3>Séries</h3>
+  <span>Total : <span id="spanCountSeries"></span> <button onclick="displayList('divCountSeries');">Afficher la liste</button></span>
+  <div>
+   <select size=10></select>
+  </div>
+ </div>
+ <div id="divEpisodeCounts" class="container">
+  <h3>Episodes</h3>
+  <div id="divCountEpisodes">
+   <input id="radioCountEpisodesBySeries" type="radio" name="countby" value="series" onchange="displaySelectCountEpisodes(this.value);">
+   <label for="radioCountEpisodesBySeries">Séries</label>
+   <input id="radioCountEpisodesByCharacter" type="radio" name="countby" value="characters" onchange="displaySelectCountEpisodes(this.value);">
+   <label for="radioCountEpisodesByCharacter">Personnages</label>
+   <input id="radioCountEpisodesByVoiceActor" type="radio" name="countby" value="voiceactors" onchange="displaySelectCountEpisodes(this.value);">
+   <label for="radioCountEpisodesByVoiceActor">Doubleurs</label>
+   <select onchange="countEpisodes(this.value);"></select>
+   <span>Total : <span id="spanCountEpisodes"></span> <button onclick="displayList('divCountEpisodes');">Afficher la liste</button></span>
+   <div>
+    <select id="selectCountEpisodes" size="10"></select>
+   </div>
+  </div>
+ </div>
+ <div id="divMonsterCounts" class="container">
+  <div id="divCountMonsters">
+   <h3>Monstres</h3>
+   <span>Total : <span id="spanCountMonsters"></span> <button onclick="displayList('divCountMonsters');">Afficher la liste</button></span>
+   <div>
+    <select id="selectCountMonsters" size="10"></select>
+   </div>
+  </div>
+  <div id="divCountMonsterTypes">
+   <h3>Types de monstres</h3>
+   <span>Total : <span id="spanCountMonsterTypes"></span> <button onclick="displayList('divCountMonsterTypes');">Afficher la liste</button></span>
+   <div>
+    <select id="selectCountMonsterTypes" size="10"></select>
+   </div>
+  </div>
+  <div id="divCountMonsterSubtypes">
+   <h3>Sous-types de monstres</h3>
+   <span>Total : <span id="spanCountMonsterSubtypes"></span> <button onclick="displayList('divCountMonsterSubtypes');">Afficher la liste</button></span>
+   <div>
+    <select id="selectCountMonsterSubtypes" size="10"></select>
+   </div>
+  </div>
+  <div id="divCountMonsterSpecies">
+   <h3>Espèces de monstres</h3>
+   <span>Total : <span id="spanCountMonsterSpecies"></span> <button onclick="displayList('divCountMonsterSpecies');">Afficher la liste</button></span>
+   <div>
+    <select id="selectCountMonsterSpecies" size="10"></select>
+   </div>
+  </div>
+  <div id="divCountMonstersByGender">
+   <h3>Monstres par genre</h3>
+   <select onchange="countMonstersByGender(this.value);">
+    <option disabled selected>Sélectionnez un genre</option>
+    <option value="male">Homme</option>
+	<option value="female">Femme</option>
+	<option value="none">Autre</option>
+   </select>
+   <span>Total : <span id="spanCountMonstersByGender"></span> <button onclick="displayList('divCountMonstersByGender');">Afficher la liste</button></span>
+   <div>
+    <select id="selectCountMonstersByGender" size="10"></select>
+   </div>
+  </div>
+ </div>
+ <div id="divUpdateValue" class="container">
+  <h3></h3>
+  <form onsubmit="return updateValue(this.newvalue.value);">
+   <input type="text" name="newvalue" placeholder="Entrez une nouvelle valeur"><br>
+   <input type="submit" value="Modifier">
+  </form>
+  <button onclick="deleteValue();">Supprimer</button>
+  <span id="spanUpdateValue"></span>
+ </div>
+</section>
+<footer>
+ <span>[T103] Structures et données - Justin Stas - Mai 2024</span>
+</footer>
+</body>
+</html>
