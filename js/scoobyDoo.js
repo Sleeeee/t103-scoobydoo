@@ -5,7 +5,6 @@
 *********************************************************/
 "use strict";
 document.addEventListener('DOMContentLoaded',init);
-let seriesArray = [];
 
 function init(){
 	qs('h1').innerHTML='ScoobyDoo';
@@ -30,26 +29,26 @@ function request(url, callback){ // Template de requête AJAX vers la database
 	xhr.send();
 }
 
-function callbackFormats(xhr){
-	let res = JSON.parse(xhr.response), h = "<input id='radiof00' type='radio' name='format' value='f00' onchange='getSeriesByFormat(this.value);' checked><label for='radiof00'>Tous</label> ";
-	for (let o of res) h += `<input id="radio${o.id}" type="radio" name="format" value="${o.id}"  onchange="getSeriesByFormat(this.value);"><label for="radio${o.id}">${o.name}</label> `;
+function callbackFormats(xhr){ // Initialise les boutons radio du filtre des séries
+	let res = JSON.parse(xhr.response), h = "<input id='radiof00' type='radio' name='format' value='f00' onchange='getSeriesByFormat(this.value);' checked><label for='radiof00'>Tous</label> "; // A l'initialisation, toutes les séries sont affichées
+	for (let o of res) h += `<input id="radio${o.id}" type="radio" name="format" value="${o.id}"  onchange="getSeriesByFormat(this.value);"><label for="radio${o.id}">${o.name}</label> `; // Envoie une requête à chaque changement de bouton
 	setH("divFormats", h);
 }
 
-function getSeriesByFormat(format){
-	getElem("tbEpisodesSeries").style.display = "none";
+function getSeriesByFormat(format){ // Récupère les séries correspondant à un format
+	getElem("tbEpisodesSeries").style.display = "none"; // Réinitialisation de la table des épisodes si elle était affichée
 	request(`/series?f=${format}`, callbacSeriesByFormat);
 }
 
-function callbacSeriesByFormat(xhr){
+function callbacSeriesByFormat(xhr){ // Génération du select des séries
 	let res = JSON.parse(xhr.response), h = "<option disabled selected>Sélectionnez une série</option>", s = getElem("selectSeries");
 	for (let o of res) h += `<option value="${o.id}">${o.name}</option>`;
 	s.innerHTML = h;
 	s.size = res.length + 1;
-	s.onchange = function(){request(`/epbyfilter?i=${this.value}`, callbackEpisodesSeries);};
+	s.onchange = function(){request(`/epbyfilter?i=${this.value}`, callbackEpisodesSeries);}; // Récupère les épisodes correspondant à la série sélectionnée
 }
 
-function callbackSeries(xhr){ // Remplit le select de la page d'accueil
+function callbackSeries(xhr){ // Remplit le select de la page d'accueil et de la feuille statistique
 	let res = JSON.parse(xhr.response), h = "<option disabled selected>Sélectionnez une série</option>", l = res.length, s = getElem("selectSeries");
 	for (let o of res) h += `<option value="${o.id}">${o.name}</option>`;
 	s.innerHTML = h;
@@ -70,9 +69,9 @@ function callbackMonsterElems(xhr){ // Remplit les select d'attributs de monstre
 		// TP11
 		setH(`selectMonster${e}`, h);
 		// TP12
-		if (e == "Gender") continue;
-		let nameFix = (e == "Species") ? e : e + "s";
-		setT(`spanCountMonster${nameFix}`, countOccurences(h, "</option>"));
+		if (e == "Gender") continue; // Le genre suit un traitement différent
+		let nameFix = (e == "Species") ? e : e + "s"; // Species est déjà terminé par un 's'
+		setT(`spanCountMonster${nameFix}`, countOccurences(h, "</option>")); // Le service web renvoie du HTML et pas du JSON, on compte le nombre d'options retournées
 		setH(`selectCountMonster${nameFix}`, h);
 	}
 }
@@ -214,96 +213,95 @@ function callbackUpdateMonster(xhr){ // Affiche le message de confirmation (pas 
 	request(`/infosmon?m=${qs("#divModMonstre > h3").innerText.substr(0, 4)}`, callbackInfosMonster); // Recalcule les informations affichées sur la page
 }
 
-function displayList(divId){
+function displayList(divId){ // Fonction générale d'affichage des listes de la feuille statistique
 	qs(`#${divId} > div`).style.display = 'block';
 	let b = qs(`#${divId} > span > button`);
 	b.onclick = function(){hideList(divId)};
 	b.innerText = "Cacher la liste";
 }
 
-function hideList(divId){
+function hideList(divId){ // Désactivation des listes de la feuille statistique
 	qs(`#${divId} > div`).style.display = 'none';
 	let b = qs(`#${divId} > span > button`);
 	b.onclick = function(){displayList(divId)};
 	b.innerText = "Afficher la liste";
 }
 
-function displaySelectCountEpisodes(value){
-	hideList("divCountEpisodes");
-	qs("#divCountEpisodes > span").style.display = "none";
+function displaySelectCountEpisodes(value){ // A la sélection d'un bouton radio, récupère les valeurs correspondant au bouton pour servir de filtre aux épisodes
 	request(`/epfilter?t=${value}`, callbackEpisodeFilters);
+}
+
+function callbackEpisodeFilters(xhr){ // Génère le select des valeurs filtrantes des épisodes
+	let res = JSON.parse(xhr.response), h = "<option disabled selected>Sélectionnez une option</option>";
+	for (let o of res) h += `<option value=${o.id}>${o.name}</option>`;
+	hideList("divCountEpisodes"); // Cache la liste si elle était déjà affichée
+	qs("#divCountEpisodes > span").style.display = "none";
+	qs("#divCountEpisodes > select").innerHTML = h;
 	qs("#divCountEpisodes > select").style.display = "block";
 }
 
-function callbackEpisodeFilters(xhr){
-	let res = JSON.parse(xhr.response), h = "<option disabled selected>Sélectionnez une option</option>";
-	for (let o of res) h += `<option value=${o.id}>${o.name}</option>`;
-	qs("#divCountEpisodes > select").innerHTML = h;
-}
-
-function countEpisodes(id){
+function countEpisodes(id){ // A la sélection d'une valeur filtrante, compte le nombre d'épisodes correspondant
 	qs("#divCountEpisodes > span").style.display = "inline-block";
-	request(`/epbyfilter?i=${id}`, callbackCountEpisodes);
+	request(`/epbyfilter?i=${id}`, callbackCountEpisodes); // Récupère les épisodes en fonction de l'id de la valeur filtrante
 }
 
-function callbackCountEpisodes(xhr){
+function callbackCountEpisodes(xhr){ // Génère le select des épisodes (qui sera affiché au clic du bouton d'affichage de liste) et affiche le compte
 	let res = JSON.parse(xhr.response), h = "<option disabled selected>Sélectionnez une option</option>", l = res.length, s = getElem("selectCountEpisodes");
 	for (let o of res) h += `<option value=${o.id}>${o.title}</option>`;
 	setT("spanCountEpisodes", l);
 	s.size = (l < 10) ? l+1 : 10;
 	s.innerHTML = h;
-	s.onchange = function(){displayDivUpdateValue(this)};
+	s.onchange = function(){displayDivUpdateValue(this)}; // A la sélection d'un épisode, affiche les options de modification / suppression
 }
 
-function callbackCountMonsters(xhr){
+function callbackCountMonsters(xhr){ // Génère le select des monstres et en compte le nombre
 	let res = JSON.parse(xhr.response), h = "", l = res.length, s = getElem("selectCountMonsters");
 	for (let o of res) h += `<option value="${o.id}">${o.monster}</option>`;
 	setT("spanCountMonsters", l);
 	qs("#divCountMonsters > div > select").innerHTML = h;
 }
 
-function countMonstersByGender(g){
-	request(`/monbygen?g=${g}`, callbackCountMonstersByGender);
+function countMonstersByGender(g){ // Au changement de valeur du select, compte le nombre de monstres correspondant au genre correspondant
+	qs("#divCountMonstersByGender > span").style.display = "block";
+	request(`/monbygen?g=${g}`, callbackCountMonstersByGender); // Récupère les monstres
 }
 
-function callbackCountMonstersByGender(xhr){
+function callbackCountMonstersByGender(xhr){ // Génère le select des monstres filtrés selon le genre et en compte le nombre
 	let res =  JSON.parse(xhr.response), h = "<option disabled selected>Sélectionnez une option</option>", l = res.length, s = getElem("selectCountMonstersByGender");
-	for (let o of res){
-		h += `<option value=${o.id}>${o.name}</option>`;
-	}
+	for (let o of res) h += `<option value=${o.id}>${o.name}</option>`;
 	setT("spanCountMonstersByGender", l);
 	s.size = (l < 10) ? l+1 : 10;
 	s.innerHTML = h;
-	s.onchange = function(){displayDivUpdateValue(this)};
+	s.onchange = function(){displayDivUpdateValue(this)}; // A la sélection d'un monstre, affiche les options de modification / suppression
 }
 
-function displayDivUpdateValue(select){
+function displayDivUpdateValue(select){ // Génère le div de modification / suppression d'éléments
 	let d = getElem("divUpdateValue");
-	qs("#divUpdateValue > h3").innerHTML = `<span>${select.value}</span> - ${select[select.selectedIndex].innerText}`;
+	qs("#divUpdateValue > h3").innerHTML = `<span>${select.value}</span> - ${select[select.selectedIndex].innerText}`; // Récupère la valeur sélectionnée et le libellé associé
 	d.style.display = "block";
 }
 
-function updateValue(value){
-	setT("spanUpdateValue", "");
+function updateValue(value){ // Modification du libellé d'un élement
+	setT("spanUpdateValue", ""); // Réinitialisation du span de confirmation / d'erreur
 	if (value === "") {
 		setT("spanUpdateValue", "Veuillez entrer une valeur");
-		return false;
+		return false; // Pas d'envoi de requête si le champ est vide
 	}
 	let id = qs("#divUpdateValue > h3 > span").innerText;
 	request(`/upelem?i=${id}&v=${value}`, callbackUpdateValue);
 	return false;
 }
 
-function callbackUpdateValue(xhr){
+function callbackUpdateValue(xhr){ // Affichage du message de confirmation ou d'erreur récupéré par la requête
 	setSpan(xhr, "spanUpdateValue");
 }
 
-function deleteValue(){
-	setT("spanUpdateValue", "");
+function deleteValue(){ // Suppression d'un élément
+	setT("spanUpdateValue", ""); // Réinitialisation du span de confirmation / d'erreur
 	let id = qs("#divUpdateValue > h3 > span").innerText;
 	request(`/delelem?i=${id}`, callbackDeleteValue);
 }
 
-function callbackDeleteValue(xhr){
+function callbackDeleteValue(xhr){ // Affichage du message de confirmation ou d'erreur récupéré par la requête
 	setSpan(xhr, "spanUpdateValue");
 }
