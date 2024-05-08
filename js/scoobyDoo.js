@@ -1,8 +1,3 @@
-/*********************************** scoobyDoo.js ********
-* Nom prénom 1 : STAS Justin
-* Groupe       : 1TM1
-*
-*********************************************************/
 "use strict";
 document.addEventListener('DOMContentLoaded',init);
 
