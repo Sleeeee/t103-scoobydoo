@@ -20,6 +20,3 @@ Use cases
   - Afficher les compteurs des séries, épisodes par série/personnage/doubleur, monstres et les différents attributs
   - Pour chaque compteur, afficher la liste des éléments correspondants
   - Sélectionner un élément dans une des listes afin d'en modifier la valeur ou le supprimer
-
-## Mise en place
-La base de donnée tourne sous SQLAnywhere 12 (Sybase). Le fichier setup.sql permet de recréer les structures nécessaires au fonctionnement du site. Le fichier .db doit se situer à la racine du répertoire du projet.
